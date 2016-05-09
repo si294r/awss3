@@ -9,7 +9,7 @@ use Aws\S3\S3Client;
 $client = S3Client::factory(array(
     'credentials' => array(
         'key'    => $aws_key,
-        'secret' => $aws_secret_key,
+        'secret' => $aws_secret_key
     )
 ));
 
