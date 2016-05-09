@@ -13,5 +13,6 @@ $client = S3Client::factory(array(
     )
 ));
 
+var_dump($client);
 $result = $client->listBuckets();
 print_r($result);
