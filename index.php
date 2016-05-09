@@ -2,11 +2,13 @@
 
 use Aws\S3\S3Client;
 
+include "/var/www/awss3_dev.php";
+
 // Instantiate the S3 client with your AWS credentials
 $client = S3Client::factory(array(
     'credentials' => array(
-        'key'    => 'AKIAJKL333NF43K2QMNQ',
-        'secret' => '18wGr0qFrOpg3XClNyT2UK9zk4UfL0EUEXNAXvH3',
+        'key'    => $aws_key,
+        'secret' => $aws_secret_key,
     )
 ));
 
