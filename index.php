@@ -15,11 +15,13 @@ $client = S3Client::factory(array(
 
 //var_dump($client);
 $result = $client->listBuckets();
-$data = $result->get("Buckets");
-var_dump($result);
-var_dump($data);
+$buckets = $result->get("Buckets");
+//var_dump($result);
+//var_dump($buckets);
 
-die;
+//die;
+$bucket = $buckets[0]["Name"];
+$pathToFile = "/var/www/html/awss3/test.txt";
 
 // Upload an object by streaming the contents of a file
 // $pathToFile should be absolute path to a file on disk
@@ -28,8 +30,8 @@ $result = $client->putObject(array(
     'Key'        => 'data_from_file.txt',
     'SourceFile' => $pathToFile,
     'Metadata'   => array(
-        'Foo' => 'abc',
-        'Baz' => '123'
+//        'Foo' => 'abc',
+//        'Baz' => '123'
     )
 ));
 
