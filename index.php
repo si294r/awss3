@@ -22,12 +22,13 @@ $buckets = $result->get("Buckets");
 //die;
 $bucket = $buckets[0]["Name"];
 $pathToFile = "/var/www/html/awss3/test.txt";
+$filename = basename($pathToFile);
 
 // Upload an object by streaming the contents of a file
 // $pathToFile should be absolute path to a file on disk
 $result = $client->putObject(array(
     'Bucket'     => $bucket,
-    'Key'        => 'data_from_file.txt',
+    'Key'        => $filename,
     'SourceFile' => $pathToFile,
     'Metadata'   => array(
 //        'Foo' => 'abc',
@@ -37,6 +38,6 @@ $result = $client->putObject(array(
 
 // We can poll the object until it is accessible
 $client->waitUntil('ObjectExists', array(
-    'Bucket' => $this->bucket,
-    'Key'    => 'data_from_file.txt'
+    'Bucket' => $bucket,
+    'Key'    => $filename
 ));
