@@ -15,7 +15,9 @@ $client = S3Client::factory(array(
 
 //var_dump($client);
 $result = $client->listBuckets();
+$data = $result->get("data");
 var_dump($result);
+var_dump($data);
 
 die;
 
