@@ -6,6 +6,10 @@ include '/var/www/mongodb_rocket.php';
 
 use Aws\S3\S3Client;
 
+function get_url_download($value) {
+    return "http://files.parsetfss.com/e1a9cd04-e62a-4463-8524-177866bb62e6/" . $value;
+}
+
 $connection_string = "mongodb://"
         . $mongo_username . ":"
         . $mongo_password . "@"
@@ -19,7 +23,8 @@ $db = $client->$mongo_database; // select database
 
 $document = $db->selectCollection('_User')->findOne(['cloudSaveDataAndroid' => [ '$exists' => TRUE ]]);
 
-var_dump($document);
+$url_download = get_url_download($document["cloudSaveDataAndroid"]);
+var_dump($url_download);
 die;
 
 $clientS3 = S3Client::factory(array(
