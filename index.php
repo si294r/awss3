@@ -13,7 +13,7 @@ function get_url_download($value) {
 function upload_file_s3($pathToFile) {
     global $clientS3;
     global $aws_bucket; // defined in include file awss3
-    
+
     $filename = basename($pathToFile);
 
     $result = $clientS3->putObject(array(
@@ -48,15 +48,18 @@ $clientS3 = S3Client::factory(array(
 $db = $client->$mongo_database; // select database
 //$db->setSlaveOkay();
 
-$document = $db->selectCollection('_User')->findOne(['cloudSaveDataAndroid' => [ '$exists' => TRUE ]]);
+echo "Query Data cloud...";
+$documents = $db->selectCollection('_User')->find(['cloudSaveDataAndroid' => [ '$exists' => TRUE]]);
+echo "Done\r\n";
 
-$url_download = get_url_download($document["cloudSaveDataAndroid"]);
-//var_dump($url_download);
-//die;
+foreach ($documents as $document) {
+    $url_download = get_url_download($document["cloudSaveDataAndroid"]);
+    exec("wget " . $url_download);
 
-exec("wget ".$url_download);
+    echo "Uploading ".$document["cloudSaveDataAndroid"]."...\r\n";
+    upload_file_s3($document["cloudSaveDataAndroid"]);
 
-upload_file_s3($document["cloudSaveDataAndroid"]);
-
-unlink($document["cloudSaveDataAndroid"]);
+    echo "Remove download file ".$document["cloudSaveDataAndroid"]."\r\n";
+    unlink($document["cloudSaveDataAndroid"]);
+}
 
