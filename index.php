@@ -15,7 +15,7 @@ $connection_string = "mongodb://"
 $client = new MongoDB\Client($connection_string, $mongo_options); // create object client 
 
 $db = $client->$mongo_database; // select database
-$db->setSlaveOkey();
+$db->setSlaveOkay();
 
 $document = $db->selectCollection('_User')->findOne(['cloudSaveDataAndroid' => [ '$exists' => TRUE ]]);
 
