@@ -2,42 +2,50 @@
 
 require '/var/www/vendor/autoload.php';
 include "/var/www/awss3_dev.php";
+include '/var/www/mongodb_rocket.php';
 
 use Aws\S3\S3Client;
 
-// Instantiate the S3 client with your AWS credentials
-$client = S3Client::factory(array(
-    'credentials' => array(
-        'key'    => $aws_key,
-        'secret' => $aws_secret_key
-    )
-));
+$connection_string = "mongodb://"
+        . $mongo_username . ":"
+        . $mongo_password . "@"
+        . $mongo_host . "/"
+        . $mongo_database;
 
-//var_dump($client);
-$result = $client->listBuckets();
-$buckets = $result->get("Buckets");
-//var_dump($result);
-//var_dump($buckets);
+$client = new MongoDB\Client($connection_string, $mongo_options); // create object client 
 
-//die;
-$bucket = $buckets[0]["Name"];
-$pathToFile = "/var/www/html/awss3/test.txt";
-$filename = basename($pathToFile);
+$db = $client->$mongo_database; // select database
+$db->setSlaveOkey();
 
-// Upload an object by streaming the contents of a file
-// $pathToFile should be absolute path to a file on disk
-$result = $client->putObject(array(
-    'Bucket'     => $bucket,
-    'Key'        => $filename,
-    'SourceFile' => $pathToFile,
-    'Metadata'   => array(
-//        'Foo' => 'abc',
-//        'Baz' => '123'
-    )
-));
+$document = $db->selectCollection('_User')->findOne(['cloudSaveDataAndroid' => [ '$exists' => TRUE ]]);
 
-// We can poll the object until it is accessible
-$client->waitUntil('ObjectExists', array(
-    'Bucket' => $bucket,
-    'Key'    => $filename
-));
+var_dump($document);
+die;
+
+$clientS3 = S3Client::factory(array(
+            'credentials' => array(
+                'key' => $aws_key,
+                'secret' => $aws_secret_key
+            )
+        ));
+
+
+function upload_file_s3($pathToFile) {
+    global $clientS3;
+    global $aws_bucket; // defined in include file awss3
+    
+    $filename = basename($pathToFile);
+
+    $result = $clientS3->putObject(array(
+        'Bucket' => $aws_bucket,
+        'Key' => $filename,
+        'SourceFile' => $pathToFile,
+        'Metadata' => array(
+        )
+    ));
+
+    $clientS3->waitUntil('ObjectExists', array(
+        'Bucket' => $aws_bucket,
+        'Key' => $filename
+    ));
+}
