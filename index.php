@@ -38,6 +38,13 @@ $connection_string = "mongodb://"
 
 $client = new MongoDB\Client($connection_string, $mongo_options); // create object client 
 
+$clientS3 = S3Client::factory(array(
+            'credentials' => array(
+                'key' => $aws_key,
+                'secret' => $aws_secret_key
+            )
+        ));
+
 $db = $client->$mongo_database; // select database
 //$db->setSlaveOkay();
 
@@ -49,12 +56,7 @@ $url_download = get_url_download($document["cloudSaveDataAndroid"]);
 
 exec("wget ".$url_download);
 
-$clientS3 = S3Client::factory(array(
-            'credentials' => array(
-                'key' => $aws_key,
-                'secret' => $aws_secret_key
-            )
-        ));
-
 upload_file_s3($document["cloudSaveDataAndroid"]);
+
+unlink($document["cloudSaveDataAndroid"]);
 
