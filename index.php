@@ -52,7 +52,12 @@ echo "Query Data cloud...";
 $documents = $db->selectCollection('_User')->find(['cloudSaveDataAndroid' => [ '$exists' => TRUE]]);
 echo "Done\r\n";
 
+$arr_doc = [];
 foreach ($documents as $document) {
+    $arr_doc[] = $document;
+}
+
+foreach ($arr_doc as $document) {
     $url_download = get_url_download($document["cloudSaveDataAndroid"]);
     exec("wget " . $url_download);
 
@@ -61,5 +66,7 @@ foreach ($documents as $document) {
 
     echo "Remove download file ".$document["cloudSaveDataAndroid"]."\r\n";
     unlink($document["cloudSaveDataAndroid"]);
+    
+    
 }
 
