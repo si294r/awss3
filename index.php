@@ -59,14 +59,18 @@ foreach ($documents as $document) {
 
 foreach ($arr_doc as $document) {
     $url_download = get_url_download($document["cloudSaveDataAndroid"]);
+    
+    redownload:
     exec("wget " . $url_download);
 
-    echo "Uploading ".$document["cloudSaveDataAndroid"]."...\r\n";
+    if (!is_file($document["cloudSaveDataAndroid"])) {
+        goto redownload;
+    }
+    
+    echo "Uploading " . $document["cloudSaveDataAndroid"] . "...\r\n";
     upload_file_s3($document["cloudSaveDataAndroid"]);
 
-    echo "Remove download file ".$document["cloudSaveDataAndroid"]."\r\n";
+    echo "Remove download file " . $document["cloudSaveDataAndroid"] . "\r\n";
     unlink($document["cloudSaveDataAndroid"]);
-    
-    
 }
 
