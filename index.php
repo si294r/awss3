@@ -19,9 +19,7 @@ function upload_file_s3($pathToFile) {
     $result = $clientS3->putObject(array(
         'Bucket' => $aws_bucket,
         'Key' => $filename,
-        'SourceFile' => $pathToFile,
-        'Metadata' => array(
-        )
+        'SourceFile' => $pathToFile
     ));
     var_dump($result);
 
@@ -32,7 +30,7 @@ function upload_file_s3($pathToFile) {
 
     $result = $clientS3->headObject(array(
         'Bucket' => $aws_bucket,
-        'Key' => $filename . "abc"
+        'Key' => "tfss-217e4ec4-0574-434f-bc74-2a4f8dd44f5f-cloudSaveDataAndroid"
     ));
     var_dump($result);
     
