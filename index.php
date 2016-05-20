@@ -23,6 +23,7 @@ function upload_file_s3($pathToFile) {
         'Metadata' => array(
         )
     ));
+    var_dump($result);
 
     $clientS3->waitUntil('ObjectExists', array(
         'Bucket' => $aws_bucket,
