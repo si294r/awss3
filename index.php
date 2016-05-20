@@ -55,6 +55,7 @@ echo "Done\r\n";
 $arr_doc = [];
 foreach ($documents as $document) {
     $arr_doc[] = $document;
+    break;
 }
 
 foreach ($arr_doc as $document) {
@@ -72,5 +73,6 @@ foreach ($arr_doc as $document) {
 
     echo "Remove download file " . $document["cloudSaveDataAndroid"] . "\r\n";
     unlink($document["cloudSaveDataAndroid"]);
+    break;
 }
 
