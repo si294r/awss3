@@ -16,6 +16,7 @@ function upload_file_s3($pathToFile) {
 
     $filename = basename($pathToFile);
 
+    reupload:
     $result = $clientS3->putObject(array(
         'Bucket' => $aws_bucket,
         'Key' => $filename,
@@ -29,13 +30,14 @@ function upload_file_s3($pathToFile) {
     ));
 
     try {
-        $result = $clientS3->headObject(array(
+        $result_head = $clientS3->headObject(array(
             'Bucket' => $aws_bucket,
-            'Key' => "tfss-217e4ec4-0574-434f-bc74-2a4f8dd44f5f-cloudSaveDataAndroid"
+            'Key' => $filename
         ));
-        var_dump($result);
+        var_dump($result_head);
     } catch (Exception $ex) {
-        var_dump($result);
+        echo "Error while get headObject... ";
+        goto reupload;
     }
 }
 
