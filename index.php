@@ -28,12 +28,15 @@ function upload_file_s3($pathToFile) {
         'Key' => $filename
     ));
 
-    $result = $clientS3->headObject(array(
-        'Bucket' => $aws_bucket,
-        'Key' => "tfss-217e4ec4-0574-434f-bc74-2a4f8dd44f5f-cloudSaveDataAndroid"
-    ));
-    var_dump($result);
-    
+    try {
+        $result = $clientS3->headObject(array(
+            'Bucket' => $aws_bucket,
+            'Key' => "tfss-217e4ec4-0574-434f-bc74-2a4f8dd44f5f-cloudSaveDataAndroid"
+        ));
+        var_dump($result);
+    } catch (Exception $ex) {
+        var_dump($result);
+    }
 }
 
 $connection_string = "mongodb://"
@@ -55,7 +58,7 @@ $db = $client->$mongo_database; // select database
 //$db->setSlaveOkay();
 
 echo "Query Data cloud...";
-$documents = $db->selectCollection('_User')->find(['cloudSaveDataAndroid' => [ '$exists' => TRUE]]);
+$documents = $db->selectCollection('_User')->find(['cloudSaveDataAndroid' => ['$exists' => TRUE]]);
 echo "Done\r\n";
 
 $arr_doc = [];
@@ -66,14 +69,14 @@ foreach ($documents as $document) {
 
 foreach ($arr_doc as $document) {
     $url_download = get_url_download($document["cloudSaveDataAndroid"]);
-    
+
     redownload:
     exec("wget " . $url_download);
 
     if (!is_file($document["cloudSaveDataAndroid"])) {
         goto redownload;
     }
-    
+
     echo "Uploading " . $document["cloudSaveDataAndroid"] . "...\r\n";
     upload_file_s3($document["cloudSaveDataAndroid"]);
 
