@@ -29,6 +29,7 @@ function upload_file_s3($pathToFile) {
         'Key' => $filename
     ));
 
+    $reupload = false;
     try {
         $result_head = $clientS3->headObject(array(
             'Bucket' => $aws_bucket,
@@ -37,6 +38,10 @@ function upload_file_s3($pathToFile) {
         var_dump($result_head);
     } catch (Exception $ex) {
         echo "Error while get headObject... ";
+        $reupload = true;
+    }
+
+    if ($reupload) {
         goto reupload;
     }
 }
