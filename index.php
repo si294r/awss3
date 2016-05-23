@@ -76,6 +76,7 @@ foreach ($documents as $document) {
     $arr_doc[] = $document;
 //    break;
 }
+echo  "Total Documents: ".count($arr_doc)."\r\n";
 
 foreach ($arr_doc as $document) {
     $url_download = get_url_download($document["cloudSaveDataAndroid"]);
