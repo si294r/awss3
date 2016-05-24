@@ -96,3 +96,4 @@ foreach ($arr_doc as $document) {
 //    break;
 }
 
+echo  "Total Documents: ".count($arr_doc)."\r\n";
