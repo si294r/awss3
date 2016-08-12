@@ -46,7 +46,7 @@ function upload_file_s3($pathToFile) {
     }
 }
 
-$start_time = microtime(true);
+$start_time = (new DateTime(gmdate('Y-m-d H:i:s')))->setTimezone(new DateTimeZone('Asia/Jakarta'))->format('Y-m-d H:i:s');
 
 $connection_string = "mongodb://"
         . $mongo_username . ":"
@@ -95,13 +95,13 @@ foreach ($arr_doc as $document) {
 
     echo "Remove download file " . $document["cloudSaveDataAndroid"] . "\r\n";
     unlink($document["cloudSaveDataAndroid"]);
-//    break;
+    //break;
 }
 
 echo  "Total Documents: ".count($arr_doc)."\r\n";
 
 $memory_usage = memory_get_usage(true);
-$end_time = microtime(true);
+$end_time = (new DateTime(gmdate('Y-m-d H:i:s')))->setTimezone(new DateTimeZone('Asia/Jakarta'))->format('Y-m-d H:i:s');
 
 $content  = "Start Time = ".$start_time."\r\n";
 $content .= "End Time = ".$end_time."\r\n";
