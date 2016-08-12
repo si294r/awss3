@@ -46,6 +46,8 @@ function upload_file_s3($pathToFile) {
     }
 }
 
+$start_time = microtime(true);
+
 $connection_string = "mongodb://"
         . $mongo_username . ":"
         . $mongo_password . "@"
@@ -97,3 +99,13 @@ foreach ($arr_doc as $document) {
 }
 
 echo  "Total Documents: ".count($arr_doc)."\r\n";
+
+$memory_usage = memory_get_usage(true);
+$end_time = microtime(true);
+
+$content  = "Start Time = ".$start_time."\r\n";
+$content .= "End Time = ".$end_time."\r\n";
+$content .= "Memory Usage = ".$memory_usage."\r\n";
+$content .= "Total Documents = ".count($arr_doc)."\r\n";
+
+file_put_contents("awss3.log", $content);
