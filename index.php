@@ -1,7 +1,8 @@
 <?php
 
 require '/var/www/vendor/autoload.php';
-include "/var/www/awss3_dev.php";
+//include "/var/www/awss3_dev.php";
+include "/var/www/awss3_prod.php";
 include '/var/www/mongodb_rocket.php';
 
 use Aws\S3\S3Client;
