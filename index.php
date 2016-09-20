@@ -69,8 +69,7 @@ $db = $client->$mongo_database; // select database
 
 echo "Query Data cloud...";
 $documents = $db->selectCollection('_User')->find([
-    'cloudSaveDataAndroid' => ['$exists' => TRUE],
-    'facebookID' => '1113271782022703'
+    'cloudSaveData' => ['$exists' => TRUE]
 //    'cloudSaveDataAndroid' => 'tfss-e9f0c049-ded3-4187-b459-b5e4d84766f9-cloudSaveDataAndroid'
     ]);
 echo "Done\r\n";
