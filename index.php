@@ -17,12 +17,18 @@ function upload_file_s3($pathToFile) {
 
     $filename = basename($pathToFile);
 
+    // cek if file already upload to amazon S3
+    try {
         $result_head = $clientS3->headObject(array(
             'Bucket' => $aws_bucket,
-            'Key' => $filename."123"
+            'Key' => $filename
         ));
         var_dump($result_head);
+        // file exists, abort upload process
         return;
+    } catch (Exception $ex) {
+        echo "File not exists, goto upload...";
+    }
         
     reupload:
     $result = $clientS3->putObject(array(
