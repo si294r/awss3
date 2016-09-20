@@ -17,6 +17,13 @@ function upload_file_s3($pathToFile) {
 
     $filename = basename($pathToFile);
 
+        $result_head = $clientS3->headObject(array(
+            'Bucket' => $aws_bucket,
+            'Key' => $filename
+        ));
+        var_dump($result_head);
+        return;
+        
     reupload:
     $result = $clientS3->putObject(array(
         'Bucket' => $aws_bucket,
