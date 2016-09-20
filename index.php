@@ -11,24 +11,47 @@ function get_url_download($value) {
     return "http://files.parsetfss.com/e1a9cd04-e62a-4463-8524-177866bb62e6/" . $value;
 }
 
-function upload_file_s3($pathToFile) {
+function is_file_s3_exists($pathToFile) {
     global $clientS3;
     global $aws_bucket; // defined in include file awss3
 
     $filename = basename($pathToFile);
 
+    $result = false;
     // cek if file already upload to amazon S3
     try {
         $result_head = $clientS3->headObject(array(
             'Bucket' => $aws_bucket,
             'Key' => $filename
         ));
+        echo "File exists, continue next file...\r\n";
         var_dump($result_head);
         // file exists, abort upload process
-        return;
+        $result = true;
     } catch (Exception $ex) {
-        echo "File not exists, goto upload...";
+        echo "File not exists, todo: download then upload to s3...\r\n";
     }
+    return $result;
+}
+
+function upload_file_s3($pathToFile) {
+    global $clientS3;
+    global $aws_bucket; // defined in include file awss3
+
+    $filename = basename($pathToFile);
+
+//    // cek if file already upload to amazon S3
+//    try {
+//        $result_head = $clientS3->headObject(array(
+//            'Bucket' => $aws_bucket,
+//            'Key' => $filename
+//        ));
+//        var_dump($result_head);
+//        // file exists, abort upload process
+//        return;
+//    } catch (Exception $ex) {
+//        echo "File not exists, goto upload...";
+//    }
         
     reupload:
     $result = $clientS3->putObject(array(
@@ -97,6 +120,8 @@ echo  "Total Documents: ".count($arr_doc)."\r\n";
 
 foreach ($arr_doc as $document) {
     $file_cloudSaveData = $document["cloudSaveData"];
+
+    if (is_file_s3_exists($file_cloudSaveData)) continue;
     
     $url_download = get_url_download($file_cloudSaveData);
 
