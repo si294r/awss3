@@ -118,7 +118,9 @@ foreach ($documents as $document) {
 }
 echo  "Total Documents: ".count($arr_doc)."\r\n";
 
-foreach ($arr_doc as $document) {
+$total_count = count($arr_doc);
+foreach ($arr_doc as $no_doc=>$document) {
+    echo "Processing No ".($no_doc+1)." from ".$total_count."\r\n";
     $file_cloudSaveData = $document["cloudSaveData"];
 
     if (is_file_s3_exists($file_cloudSaveData)) continue;
