@@ -83,20 +83,22 @@ foreach ($documents as $document) {
 echo  "Total Documents: ".count($arr_doc)."\r\n";
 
 foreach ($arr_doc as $document) {
-    $url_download = get_url_download($document["cloudSaveDataAndroid"]);
+    $file_cloudSaveData = $document["cloudSaveData"];
+    
+    $url_download = get_url_download($file_cloudSaveData);
 
     redownload:
     exec("wget " . $url_download);
 
-    if (!is_file($document["cloudSaveDataAndroid"])) {
+    if (!is_file($file_cloudSaveData)) {
         goto redownload;
     }
 
-    echo "Uploading " . $document["cloudSaveDataAndroid"] . "...\r\n";
-    upload_file_s3($document["cloudSaveDataAndroid"]);
+    echo "Uploading " . $file_cloudSaveData . "...\r\n";
+    upload_file_s3($file_cloudSaveData);
 
-    echo "Remove download file " . $document["cloudSaveDataAndroid"] . "\r\n";
-    unlink($document["cloudSaveDataAndroid"]);
+    echo "Remove download file " . $file_cloudSaveData . "\r\n";
+    unlink($file_cloudSaveData);
     //break;
 }
 
