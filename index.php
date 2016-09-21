@@ -119,6 +119,7 @@ foreach ($documents as $document) {
 echo  "Total Documents: ".count($arr_doc)."\r\n";
 
 $total_count = count($arr_doc);
+$goto_counter = 0;
 foreach ($arr_doc as $no_doc=>$document) {
     echo "Processing No ".($no_doc+1)." from ".$total_count."\r\n";
     $file_cloudSaveData = $document["cloudSaveData"];
@@ -127,11 +128,20 @@ foreach ($arr_doc as $no_doc=>$document) {
     
     $url_download = get_url_download($file_cloudSaveData);
 
+    $goto_counter = 0;
+    
     redownload:
     exec("wget " . $url_download);
 
     if (!is_file($file_cloudSaveData)) {
-        goto redownload;
+        $goto_counter++;
+        if ($goto_counter > 10) {
+            file_put_contents("error_download_".$document['facebookID'].".log", ($no_doc+1) .": ". $url_download);
+            continue;
+        } else {
+            sleep(3);
+            goto redownload;
+        }
     }
 
     echo "Uploading " . $file_cloudSaveData . "...\r\n";
